@@ -1,0 +1,124 @@
+<% layout('/layouts/boilerplate') -%>
+
+
+    <script>
+        const mapToken = '<%= process.env.MAP_TOKEN %>';
+        const coordinates = <%- JSON.stringify(details.geoCoordinate.coordinates) %>;
+        const title = `<%= details.title %>`
+    </script>
+
+<%- include('../includes/flash.ejs') %>
+    <h2 class="text-center text-2xl font-[600] text-slate-700 m-3">
+        <%= details.title %>
+    </h2>
+    <div class="flex flex-col  m-4  md:w-[55%]  md:ml-[22.5%] sm:w-[75%] sm:ml-[12.5%]">
+        <!-- img -->
+        <div class="h-[250px] w-[100%]">
+            <img src="<%= details.image.url %>" alt="img" class="h-[100%] w-[100%] rounded-xl">
+        </div>
+        <!-- info -->
+        <div class="m-4 text-slate-800">
+            <p class="mb-4"><i>owned by <%= details.owner.username %></i></p>
+            <p>
+                <%= details.description %>
+            </p>
+            <p>&#8377;<%= details.price.toLocaleString('en-In') %>
+            </p>
+            <p>
+                <%= details.location %>
+            </p>
+            <p>
+                <%= details.country %>
+            </p>
+        </div>
+        <!-- button -->
+        <% if(CurrentUser && CurrentUser._id.equals(details.owner._id)) {%>
+            <div class="flex">
+                <form action="/listings/<%= details._id %>/edit" method="get">
+                    <button
+                        class="px-6 py-2 ml-6 bg-blue-500 text-white font-bold rounded-full transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">
+                        Edit
+                    </button>
+                </form>
+                <form action="/listings/<%= details._id %>?_method=DELETE" method="post">
+                    <button
+                        class="px-6 py-2 ml-6 bg-gray-500 text-white font-bold rounded-full transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">
+                        Delete
+                    </button>
+                </form>
+            </div>
+            <% } %>
+    </div>
+    <hr class="w-[70%] ml-[15%] mb-7">
+    <% if(!CurrentUser) {%>
+        <h2 class="text-center mb-7"><a href="/login">Login to review us</a></h2>
+        <% } %>
+
+
+
+            <% if(CurrentUser) {%>
+                <div class="md:w-[55%]  md:ml-[22.5%] sm:w-[70%] sm:ml-[15%] mt-6">
+                    <h2>Review us !</h2>
+                    <form action="/listings/<%= details._id %>/review" method="post" class="m-8">
+
+                        <fieldset class="starability-slot">
+                            <legend>rating:</legend>
+                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1"
+                                checked aria-label="No rating." />
+                            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                            <label for="first-rate1" title="Terrible">1 star</label>
+                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                            <label for="first-rate2" title="Not good">2 stars</label>
+                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                            <label for="first-rate3" title="Average">3 stars</label>
+                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                            <label for="first-rate4" title="Very good">4 stars</label>
+                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                            <label for="first-rate5" title="Amazing">5 stars</label>
+                        </fieldset>
+
+                        <div class="mt-4">
+                            <label for="comment"></label>
+                            <textarea name="review[comment]" id="comment"
+                                class="comment w-[100%] border border-slate-400 rounded-md" rows="6"
+                                placeholder="Add comments"></textarea>
+                        </div>
+                        <button
+                            class="mt-4 px-6 py-2 ml-6 bg-red-600 text-white font-bold rounded-full transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">
+                            Add
+                        </button>
+                    </form>
+                </div>
+                <% } %>
+                    <hr class="w-[70%] ml-[15%]">
+                    <!-- <hr> -->
+
+                    <div class="w-[70%]  ml-[15%] grid md:grid-cols-2 sm:grid-cols-1 mt-8 ">
+                        <% for (review of details.reviews) {%>
+                            <div class="  border border-black m-7 bg-gray-100 rounded-xl">
+                                <p class="m-3  font-bold"><i>
+                                        <%= review.author.username %>
+                                    </i></p>
+                                <p class="starability-result mb-4 mx-2" data-rating="<%= review.rating %>"></p>
+                                <h1 class="m-3">"<%= review.comment %>"</h1>
+                                <% if(CurrentUser && CurrentUser._id.equals(review.author._id)) {%>
+                                    <form action="/listings/<%= details._id %>/review/<%= review._id %>?_method=DELETE"
+                                        method="post">
+
+                                        <button
+                                            class="m-2 px-3 py-1 ml-6 bg-gray-500 text-white font-bold rounded-full transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">
+                                            delete
+                                        </button>
+                                    </form>
+                                    <% } %>
+                            </div>
+                            <% } %>
+                    </div>
+
+                    <!-- map -->
+                    <div class="my-5 w-[70%]  ml-[15%] ">
+                        <h2>Where you'll</h2>
+                        <div id="map" class="w-[100%] h-[400px]"></div>
+                    </div>
+
+            <script src="/js/map.js"></script>

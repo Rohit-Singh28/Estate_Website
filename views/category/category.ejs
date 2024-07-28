@@ -1,0 +1,28 @@
+<% layout('/layouts/boilerplate') -%>
+
+<body>
+    <%- include("../includes/cate.ejs") %>
+    <%- include('../includes/flash.ejs') %>
+    <h1 class="mx-14 text-xl font-bold"><%= cateoption %></h1>
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 m-4 ">
+            <% for (list of allListings) {%>
+                <% if(list.category == cateoption) {%>
+                    <a href="/listings/<%= list._id %>">
+                        <div
+                            class="h-[400px] m-5 border border-slate-400  hover:opacity-[0.4]  shadow-sm rounded-xl  duration-500">
+                            <div class="h-[80%]  overflow-hidden rounded-tl-xl rounded-tr-xl ">
+                                <img src="<%= list.image.url %>" alt="" class="h-[100%] w-[100%]">
+                            </div>
+                            <div class="m-2">
+                                <p class="font-bold text-md">
+                                    <%= list.title %>
+                                </p>
+                                <p class="m-2">&#8377;<%= list.price.toLocaleString('en-In') %>/night</p>
+                            </div>
+                        </div>
+                    </a>
+                <% } %>
+            <% } %>
+
+        </div>
+</body>

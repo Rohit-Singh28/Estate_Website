@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+@media(max-width:767px) {
+    #mobile-menu-2 {
+        margin-top: 11px;
+        background: rgb(229, 231, 235, 0.95);
+        font-weight: 700;
+        color: rgb(56, 54, 54);
+    }
+}
+
+@media(max-width:600px) {
+    .search{
+        display: none;
+    }
+    .discount{
+        display: none;
+    }
+    .searchnav{
+        display: block;
+    }
+}
+
+
+
+input,
+textarea {
+    padding: 10px;
+}
+
+
+
+.valid {
+    border: 3px solid rgb(93, 225, 93);
+}
+
+.tvalid {
+    color: rgb(93, 225, 93);
+    ;
+}
+
+
+
+.nonvalid {
+    border: 3px solid rgb(215, 47, 47);
+}
+
+.tnonvalid {
+    color: rgb(215, 47, 47);
+    ;
+}
+
+label {
+    font-weight: bold;
+}
+
+.wordSpacing {
+    word-spacing: 10px;
+}
+img{
+    mix-blend-mode: multiply;
+}
+
